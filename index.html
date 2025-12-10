@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alcoholemia Real España 2025</title>
+    <style>
+        :root {
+            --bg: #0d1117;
+            --card: #161b22;
+            --text: #f0f6fc;
+            --accent: #58a6ff;
+            --ok: #4cd964;
+            --warning: #ffb302;
+            --danger: #ff453a;
+            --ig: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
+        }
+        body {
+            margin: 0;
+            background: linear-gradient(135deg, #0d1117, #1a1f2e);
+            color: var(--text);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .contenedor {
+            background: var(--card);
+            padding: 30px;
+            border-radius: 16px;
+            width: 100%;
+            max-width: 420px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+            border: 1px solid #30363d;
+        }
+        h2 { text-align: center; margin: 0 0 8px; color: var(--accent); }
+        label { display: block; margin: 16px 0 6px; font-weight: 600; font-size: 14px; }
+        input, select {
+            width: 100%;
+            padding: 12px;
+            background: #0d1117;
+            border: 1px solid #30363d;
+            border-radius: 8px;
+            color: white;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+        input:focus, select:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(88,166,255,0.2);
+        }
+        button {
+            width: 100%;
+            padding: 14px;
+            margin-top: 20px;
+            background: var(--accent);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        button:hover { background: #1f6feb; }
+        .resultado {
+            margin-top: 25px;
+            padding: 16px;
+            border-radius: 10px;
+            text-align: center;
+            font-size: 18px;
+            line-height: 1.5;
+            display: none;
+        }
+        .super-ok { background: rgba(76,217,100,0.15); border: 1px solid var(--ok); color: var(--ok); }
+        .ok { background: rgba(76,217,100,0.1); border: 1px solid var(--ok); color: var(--ok); }
+        .alerta { background: rgba(255,179,2,0.15); border: 1px solid var(--warning); color: white; }
+        .peligro { background: rgba(255,69,58,0.2); border: 1px solid var(--danger); color: var(--danger); }
+        .error { background: rgba(255,69,58,0.15); color: var(--danger); }
+        .consejo { font-size: 15px; margin-top: 12px; opacity: 0.9; }
+        .nota { font-size: 12px; opacity: 0.7; margin-top: 30px; text-align: center; line-height: 1.5; }
+        .instagram-btn {
+            display: block;
+            margin: 30px auto 0;
+            padding: 14px 20px;
+            background: var(--ig);
+            color: white;
+            text-align: center;
+            text-decoration: none;
+            border-radius: 12px;
+            font-weight: bold;
+            font-size: 16px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+        }
+        .instagram-btn:hover { transform: translateY(-2px); }
+        .hidden { display: none; }
+    </style>
+</head>
+<body>
+    <div class="contenedor">
+        <h2>Calculadora Alcoholemia Real</h2>
+        <p style="text-align:center;font-size:14px;opacity:0.8;margin-bottom:20px;">
+            España 2025 – Límite 0.3 g/L
+        </p>
+
+        <form id="formulario">
+            <label>Peso en kg</label>
+            <input type="number" id="peso" min="40" max="150" step="0.5" required placeholder="Ej: 75">
+
+            <label>Sexo biológico</label>
+            <select id="sexo" required>
+                <option value="hombre">Hombre</option>
+                <option value="mujer">Mujer</option>
+            </select>
+
+            <label>¿Qué has bebido?</label>
+            <select id="tipo_bebida" required>
+                <option value="">Selecciona una opción</option>
+                <option value="cerveza">Cerveza</option>
+                <option value="vino">Vino / Cava</option>
+                <option value="cubata">Cubata / Combinado</option>
+            </select>
+
+            <!-- Cerveza -->
+            <div id="opcion_cerveza" class="hidden">
+                <label>Tipo de cerveza</label>
+                <select id="tipo_cerveza">
+                    <option value="chica">Caña / Tercero (33 cl)</option>
+                    <option value="grande">Pinta / Jarra (50 cl)</option>
+                </select>
+            </div>
+
+            <!-- Cubata -->
+            <div id="opcion_cubata" class="hidden">
+                <label>Licor del cubata</label>
+                <select id="tipo_licor">
+                    <option value="ron">Ron (40%)</option>
+                    <option value="whisky">Whisky (40%)</option>
+                    <option value="vodka">Vodka (40%)</option>
+                    <option value="ginebra">Ginebra (40%)</option>
+                    <option value="otros">Otros (37-50%)</option>
+                </select>
+            </div>
+
+            <label>Número de consumiciones</label>
+            <input type="number" id="cantidad" min="0" max="40" step="0.5" required placeholder="Ej: 5">
+
+            <label>Hora del último trago (0-23)</label>
+            <input type="number" id="hora_ultima" min="0" max="23" required placeholder="Ej: 3">
+
+            <label>Hora prevista de conducir (0-23)</label>
+            <input type="number" id="hora_conduccion" min="0" max="23" required placeholder="Ej: 9">
+
+            <button type="submit">CALCULAR ALCOHOLEMIA</button>
+        </form>
+
+        <div id="resultado" class="resultado"></div>
+
+        <div class="nota">
+            <strong>Importante:</strong> Solo estimación. Si vas a conducir → 0 alcohol.
+        </div>
+
+        <a href="https://www.instagram.com/adriaanmorenoo_05/" target="_blank" class="instagram-btn">
+            Sígueme @adriaanmorenoo_05
+        </a>
+    </div>
+
+<script>
+// Mostrar/ocultar opciones según bebida
+document.getElementById('tipo_bebida').addEventListener('change', function() {
+    const bebida = this.value;
+    document.getElementById('opcion_cerveza').classList.add('hidden');
+    document.getElementById('opcion_cubata').classList.add('hidden');
+    
+    if (bebida === 'cerveza') document.getElementById('opcion_cerveza').classList.remove('hidden');
+    if (bebida === 'cubata') document.getElementById('opcion_cubata').classList.remove('hidden');
+});
+
+document.getElementById('formulario').addEventListener('submit', function(e) {
+    e.preventDefault();
+
+    const peso = parseFloat(document.getElementById('peso').value);
+    const sexo = document.getElementById('sexo').value;
+    const tipo = document.getElementById('tipo_bebida').value;
+    const cantidad = parseFloat(document.getElementById('cantidad').value);
+    const hora_ultima = parseInt(document.getElementById('hora_ultima').value);
+    const hora_conduccion = parseInt(document.getElementById('hora_conduccion').value);
+
+    if (!peso || !cantidad || !tipo || isNaN(hora_ultima) || isNaN(hora_conduccion)) {
+        mostrarResultado('error', 'Rellena todos los campos correctamente.');
+        return;
+    }
+
+    // Alcohol por consumición (gramos de alcohol puro)
+    let alcoholPorUnidad = 0;
+
+    if (tipo === 'cerveza') {
+        const esGrande = document.getElementById('tipo_cerveza').value === 'grande';
+        alcoholPorUnidad = esGrande ? 20 : 13; // 50cl ≈ 20g, 33cl ≈ 13g (5% alcohol)
+    } else if (tipo === 'vino') {
+        alcoholPorUnidad = 12; // Copa 150ml al 12% ≈ 12g
+    } else if (tipo === 'cubata') {
+        const licor = document.getElementById('tipo_licor').value;
+        const graduacion = (licor === 'otros') ? 43 : 40; // promedio otros
+        alcoholPorUnidad = (40 / 100) * graduacion * 0.789; // 40ml * grad% * densidad alcohol
+        alcoholPorUnidad = Math.round(alcoholPorUnidad * 10) / 10;
+    }
+
+    const alcoholTotal = alcoholPorUnidad * cantidad;
+    const r = (sexo === 'hombre') ? 0.68 : 0.55;
+    const bac_pico = alcoholTotal / (peso * r);
+
+    let horas = hora_conduccion - hora_ultima;
+    if (horas < 0) horas += 24;
+
+    const bac = Math.max(0, bac_pico - (0.15 * horas));
+    const bac_red = bac.toFixed(3);
+
+    let texto = '', clase = '';
+
+    if (bac <= 0.01) {
+        texto = `Prácticamente a cero (${bac_red} g/L)`;
+        clase = 'super-ok';
+    } else if (bac < 0.3) {
+        texto = `Por debajo del límite<br><strong>${bac_red} g/L</strong>`;
+        clase = 'ok';
+    } else if (bac < 0.6) {
+        texto = `Superas el límite (${bac_red} g/L)<br>¡No conduzcas!`;
+        clase = 'alerta';
+    } else {
+        texto = `MUY POR ENCIMA (${bac_red} g/L)<br>¡Peligro grave!`;
+        clase = 'peligro';
+    }
+
+    if (bac > 0.3) {
+        const horas_faltan = Math.ceil((bac - 0.25) / 0.15);
+        texto += `<div class="consejo">Espera al menos <strong>${horas_faltan} horas</strong> más.</div>`;
+    }
+
+    mostrarResultado(clase, texto);
+});
+
+function mostrarResultado(clase, html) {
+    const div = document.getElementById('resultado');
+    div.className = 'resultado ' + clase;
+    div.innerHTML = html;
+    div.style.display = 'block';
+}
+</script>
+</body>
+</html>
